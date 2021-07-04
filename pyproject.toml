@@ -13,6 +13,7 @@ poetry2conda = {channel = "pip" }
 black = { channel = "pip" }
 pylint = { channel = "pip" }
 matplotlib = { channel = "conda-forge"}
+funsor = { channel = "pip" }
 
 [tool.poetry.dependencies]
 python = ">=3.7.1,<4.0"
@@ -27,6 +28,7 @@ arviz = "^0.11.2"
 ipykernel = "^6.0.1"
 ipython = "^7.25.0"
 jupytext = "^1.11.3"
+funsor = "^0.4.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
