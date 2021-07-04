@@ -4,11 +4,16 @@ version = "0.1.0"
 description = ""
 authors = ["bdatko <ben.datko@gmail.com>"]
 
-[tool.poetry.dependencies]
-python = "^3.7"
-
 [tool.poetry2conda]
 name = "mbml_numpyro"
+
+[tool.poetry2conda.dependencies]
+commitizen = { channel = "pip" }
+poetry2conda = {channel = "pip"}
+
+[tool.poetry.dependencies]
+python = ">=3.7.1,<4.0"
+pandas = "^1.2.4"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
