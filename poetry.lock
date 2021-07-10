@@ -228,6 +228,22 @@ python-versions = "*"
 six = "*"
 
 [[package]]
+name = "daft"
+version = "0.1.2"
+description = "PGM rendering at its finest"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+matplotlib = "*"
+numpy = "*"
+
+[package.extras]
+docs = ["myst-nb", "sphinx", "jupytext"]
+test = ["pytest"]
+
+[[package]]
 name = "debugpy"
 version = "1.3.0"
 description = "An implementation of the Debug Adapter Protocol for Python"
@@ -1420,7 +1436,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.7.1,<4.0"
-content-hash = "cf82a845011f731058dda4f8c302929ae04e21c2a2ae002d99f82900f63b2195"
+content-hash = "b3ea426f49b7d98d8527fb561cad0e5ba0fca0772c201363b3f0479e5935c0ac"
 
 [metadata.files]
 appdirs = [
@@ -1588,6 +1604,10 @@ commitizen = [
 cycler = [
     {file = "cycler-0.10.0-py2.py3-none-any.whl", hash = "sha256:1d8a5ae1ff6c5cf9b93e8811e581232ad8920aeec647c37316ceac982b08cb2d"},
     {file = "cycler-0.10.0.tar.gz", hash = "sha256:cd7b2d1018258d7247a71425e9f26463dfb444d411c39569972f4ce586b0c9d8"},
+]
+daft = [
+    {file = "daft-0.1.2-py3-none-any.whl", hash = "sha256:8771c8f109e07d08f90eff11adcf722831cc7db0605cf6dd9dcde524082cf74f"},
+    {file = "daft-0.1.2.tar.gz", hash = "sha256:3e77e0389ca539a5741a906bcdcaae462b68261d06b960b0c04498b695d312e5"},
 ]
 debugpy = [
     {file = "debugpy-1.3.0-cp27-cp27m-macosx_10_14_x86_64.whl", hash = "sha256:54109c9cbce8e96986a943812de8536d001130bce27d1a370b0c39bc7d6ef619"},
