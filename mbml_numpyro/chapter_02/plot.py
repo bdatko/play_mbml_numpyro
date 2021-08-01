@@ -32,7 +32,7 @@ class DisplaySkill:
     skills_key: List[List[int]]
     color_skills: Dict
     _extent: Optional[Tuple[int, int, int, int]] = None
-    rectangles: List[Rectangle] = field(
+    _rectangles: List[Rectangle] = field(
         default_factory=list, compare=False, hash=False, repr=False
     )
     figsize: Tuple[int, int] = (20, 10)
@@ -45,6 +45,14 @@ class DisplaySkill:
     @property
     def extent(self) -> Tuple[int, int, int, int]:
         return self._extent
+
+    @property
+    def rectangles(self) -> List[Rectangle]:
+        return self._rectangles
+
+    @rectangles.deleter
+    def rectangles(self) -> None:
+        self._rectangles.clear()
 
     def _pre_process(self, responses: pd.DataFrame):
         if self.extent is None:
@@ -85,7 +93,7 @@ class DisplaySkill:
         """
 
         if self.rectangles:
-            self.rectangles.clear()
+            del self.rectangles
 
         responses = self._pre_process(responses)
 
