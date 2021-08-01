@@ -92,6 +92,9 @@ class DisplaySkill:
             Except `respones.index` == range(n_questions)
         """
 
+        assert (responses.index == pd.RangeIndex(responses.shape[0])).all()
+        assert (responses.columns == pd.RangeIndex(responses.shape[1])).all()
+
         if self.rectangles:
             del self.rectangles
 
