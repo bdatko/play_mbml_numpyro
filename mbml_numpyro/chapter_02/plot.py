@@ -25,6 +25,8 @@ class DisplaySkill:
         and index of `cmap`. Used to repalce values of `respones` array
     :param second_skill color Optional[Dict[int, str]]: Optional mapping between the second
         skill of a question, int, and the color, str name, to overlay onto the first skill
+    :param skill_legend Optional[Dict[str, str]]: Optinal dict for the figure legend where the
+        keys are color name, and the values are the labels for the skills
     :param figsize Tuple[int, int]: size of the figure, passed to `matplotlib.pyplot.subplots`
     :param copy Bool: Either modify the `response` array inplace when plotting or not
     :param return_fig_ax Bool: Either return the `fig` and `ax` or not
@@ -34,6 +36,7 @@ class DisplaySkill:
     skills_key: List[List[int]]
     color_skills: Dict[str, int]
     second_skill_color: Optional[Dict[int, str]] = None
+    skill_legend: Optional[Dict[str, str]] = None
     figsize: Tuple[int, int] = (20, 10)
     copy: bool = True
     return_fig_ax: bool = False
@@ -118,6 +121,28 @@ class DisplaySkill:
         ax.set_xlabel("Questions")
         ax.set(yticklabels=[])
         ax.set(xticklabels=[])
+
+        if self.skill_legend is not None:
+
+            # https://stackoverflow.com/a/46267860/3587374
+            legend_handles = [
+                ax.plot(
+                    [],
+                    marker="s",
+                    markersize=15,
+                    linestyle="",
+                    color=color,
+                    label=skill,
+                )[0]
+                for (color, skill) in self.skill_legend.items()
+            ]
+
+            ax.legend(
+                handles=legend_handles,
+                loc="upper center",
+                bbox_to_anchor=(0.5, -0.08),
+                ncol=max(map(max, self.skills_key)) + 1,
+            )
 
         if self.return_fig_ax:
             return fig, ax
