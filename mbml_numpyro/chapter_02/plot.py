@@ -22,7 +22,9 @@ class DisplaySkill:
     :param skills_key List[List[int]]: Sparse list of length `n_questions`, where
         each value is the list of required skills for question n
     :param color_skills: Dict[str, int]: mapping between the skill needed for question
-        and index of `cmap`. Used repalce values of `respones` array
+        and index of `cmap`. Used to repalce values of `respones` array
+    :param second_skill color Optional[Dict[int, str]]: Optional mapping between the second
+        skill of a question, int, and the color, str name, to overlay onto the first skill
     :param figsize Tuple[int, int]: size of the figure, passed to `matplotlib.pyplot.subplots`
     :param copy Bool: Either modify the `response` array inplace when plotting or not
     :param return_fig_ax Bool: Either return the `fig` and `ax` or not
@@ -30,7 +32,8 @@ class DisplaySkill:
 
     cmap: ListedColormap
     skills_key: List[List[int]]
-    color_skills: Dict
+    color_skills: Dict[str, int]
+    second_skill_color: Optional[Dict[int, str]] = None
     figsize: Tuple[int, int] = (20, 10)
     copy: bool = True
     return_fig_ax: bool = False
@@ -69,16 +72,17 @@ class DisplaySkill:
                 ",".join(map(str, required_skills))
             ]
 
-        # https://stackoverflow.com/a/32768985/3587374
-        wrong_answers = answers[answers != 1].stack()
+        if self.second_skill_color is not None:
+            # https://stackoverflow.com/a/32768985/3587374
+            wrong_answers = answers[answers != 1].stack()
 
-        for idx, value in wrong_answers.iteritems():
-            person, question = idx
-            skill = self.skills_key[question]
-            if len(skill) > 1 and value != 0:
-                c = self.color_skills[skill[-1]]
-                r = Rectangle((question, person + 0.5), 1.0, 0.5, fc=c, ec="none")
-                self.rectangles.append(r)
+            for idx, value in wrong_answers.iteritems():
+                person, question = idx
+                skill = self.skills_key[question]
+                if len(skill) > 1 and value != 0:
+                    c = self.second_skill_color[skill[-1]]
+                    r = Rectangle((question, person + 0.5), 1.0, 0.5, fc=c, ec="none")
+                    self.rectangles.append(r)
 
         return answers
 
