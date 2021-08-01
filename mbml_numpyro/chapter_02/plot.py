@@ -31,13 +31,13 @@ class DisplaySkill:
     cmap: ListedColormap
     skills_key: List[List[int]]
     color_skills: Dict
+    figsize: Tuple[int, int] = (20, 10)
+    copy: bool = True
+    return_fig_ax: bool = False
     _extent: Optional[Tuple[int, int, int, int]] = None
     _rectangles: List[Rectangle] = field(
         default_factory=list, compare=False, hash=False, repr=False
     )
-    figsize: Tuple[int, int] = (20, 10)
-    copy: bool = True
-    return_fig_ax: bool = False
 
     def __post_init__(self):
         pass
