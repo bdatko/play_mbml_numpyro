@@ -34,9 +34,11 @@ class DisplaySkill:
     figsize: Tuple[int, int] = (20, 10)
     copy: bool = True
     return_fig_ax: bool = False
-    _extent: Optional[Tuple[int, int, int, int]] = None
+    _extent: Optional[Tuple[int, int, int, int]] = field(
+        default=None, repr=False, init=False
+    )
     _rectangles: List[Rectangle] = field(
-        default_factory=list, compare=False, hash=False, repr=False
+        default_factory=list, compare=False, hash=False, repr=False, init=False
     )
 
     def __post_init__(self):
