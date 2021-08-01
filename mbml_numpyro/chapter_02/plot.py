@@ -37,7 +37,7 @@ class DisplaySkill:
     )
     figsize: Tuple[int, int] = (20, 10)
     copy: bool = True
-    return_fig: bool = False
+    return_fig_ax: bool = False
 
     def __post_init__(self):
         pass
@@ -110,7 +110,7 @@ class DisplaySkill:
         ax.set(yticklabels=[])
         ax.set(xticklabels=[])
 
-        if self.return_fig:
+        if self.return_fig_ax:
             return fig, ax
 
 
