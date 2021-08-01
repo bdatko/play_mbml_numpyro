@@ -31,7 +31,7 @@ class DisplaySkill:
     cmap: ListedColormap
     skills_key: List[List[int]]
     color_skills: Dict
-    extent: Optional[Tuple[int, int, int, int]] = None
+    _extent: Optional[Tuple[int, int, int, int]] = None
     rectangles: List[Rectangle] = field(
         default_factory=list, compare=False, hash=False, repr=False
     )
@@ -42,9 +42,13 @@ class DisplaySkill:
     def __post_init__(self):
         pass
 
+    @property
+    def extent(self) -> Tuple[int, int, int, int]:
+        return self._extent
+
     def _pre_process(self, responses: pd.DataFrame):
         if self.extent is None:
-            self.extent = (0, responses.shape[1], responses.shape[0], 0)
+            self._extent = (0, responses.shape[1], responses.shape[0], 0)
 
         answers = responses.copy() if self.copy else responses
 
