@@ -62,6 +62,10 @@ class DisplaySkill:
     def rectangles(self) -> None:
         self._rectangles.clear()
 
+    @property
+    def n_skills(self) -> int:
+        return max(map(max, self.skills_key)) + 1
+
     def _pre_process(self, responses: pd.DataFrame):
         if self.extent is None:
             self._extent = (0, responses.shape[1], responses.shape[0], 0)
@@ -141,7 +145,7 @@ class DisplaySkill:
                 handles=legend_handles,
                 loc="upper center",
                 bbox_to_anchor=(0.5, -0.08),
-                ncol=max(map(max, self.skills_key)) + 1,
+                ncol=self.n_skills if self.n_skills <= 7 else 7,
             )
 
         if self.return_fig_ax:
