@@ -7,7 +7,7 @@ from mbml_numpyro import DisplaySkill, chapter_02_data
 
 
 @pytest.mark.parametrize(
-    "input,color_skills,skills_key,expected",
+    "input,color_skills,skills_needed,expected",
     [
         (
             pd.DataFrame(np.array([[1, 1, 1], [0, 1, 1], [0, 1, 0]], dtype="int32")),
@@ -17,7 +17,7 @@ from mbml_numpyro import DisplaySkill, chapter_02_data
         )
     ],
 )
-def test_DisplaySkill___pre_process(input, color_skills, skills_key, expected):
+def test_DisplaySkill___pre_process(input, color_skills, skills_needed, expected):
     # Arrange
     figure_2pt15 = DisplaySkill(
         cmap=ListedColormap(
@@ -26,7 +26,7 @@ def test_DisplaySkill___pre_process(input, color_skills, skills_key, expected):
             ]
         ),
         color_skills=color_skills,
-        skills_key=skills_key,
+        skills_needed=skills_needed,
     )
     # Act
     answers = figure_2pt15._pre_process(input).values
@@ -35,7 +35,7 @@ def test_DisplaySkill___pre_process(input, color_skills, skills_key, expected):
 
 
 @pytest.mark.parametrize(
-    "color_skills,skills_key,second_skill_color,expected",
+    "color_skills,skills_needed,second_skill_color,expected",
     [
         (
             {"0": 2, "1": 3, "0,1,2": 4},
@@ -47,7 +47,7 @@ def test_DisplaySkill___pre_process(input, color_skills, skills_key, expected):
     ],
 )
 def test_DisplaySkill__init__raise_expectation(
-    color_skills, skills_key, second_skill_color, expected
+    color_skills, skills_needed, second_skill_color, expected
 ):
     # Arrange
     # Act
@@ -60,13 +60,13 @@ def test_DisplaySkill__init__raise_expectation(
                 ]
             ),
             color_skills=color_skills,
-            skills_key=skills_key,
+            skills_needed=skills_needed,
             second_skill_color=second_skill_color,
         )
 
 
 @pytest.mark.parametrize(
-    "responses,color_skills,skills_key,second_skill_color,expected",
+    "responses,color_skills,skills_needed,second_skill_color,expected",
     [
         (
             pd.DataFrame(
@@ -117,7 +117,7 @@ def test_DisplaySkill__init__raise_expectation(
     ],
 )
 def test_plot_raise_expectation(
-    responses, color_skills, skills_key, second_skill_color, expected
+    responses, color_skills, skills_needed, second_skill_color, expected
 ):
     # Arrange
     figure_2pt15 = DisplaySkill(
@@ -127,7 +127,7 @@ def test_plot_raise_expectation(
             ]
         ),
         color_skills=color_skills,
-        skills_key=skills_key,
+        skills_needed=skills_needed,
         second_skill_color=second_skill_color,
     )
     # Act
@@ -162,7 +162,7 @@ def test_plot_figure_2pt15():
             ]
         ),
         color_skills=color_skills,
-        skills_key=chapter_02_data.skills_needed,
+        skills_needed=chapter_02_data.skills_needed,
         second_skill_color=second_skill,
         skill_legend=dict(
             red="Core",

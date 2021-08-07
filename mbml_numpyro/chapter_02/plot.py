@@ -19,7 +19,7 @@ class DisplaySkill:
     Will overlay, at most, two skills onto a single question.
 
     :param cmap ListedColormap: Colormap object generated from a list of colors.
-    :param skills_key List[List[int]]: Sparse list of length `n_questions`, where
+    :param skills_needed List[List[int]]: Sparse list of length `n_questions`, where
         each value is the list of required skills for question n
     :param color_skills: Dict[str, int]: mapping between the skill needed for question
         and index of `cmap`. Used to repalce values of `respones` array
@@ -35,8 +35,8 @@ class DisplaySkill:
     cmap: ListedColormap
     color_skills: Dict[str, int]
     second_skill_color: Optional[Dict[int, str]] = None
-    skills_key: List[List[int]]
-    _skills_key: List[List[int]] = field(repr=False, init=False)
+    skills_needed: List[List[int]]
+    _skills_needed: List[List[int]] = field(repr=False, init=False)
     skill_legend: Optional[Dict[str, str]] = None
     figsize: Tuple[int, int] = (20, 10)
     copy: bool = True
@@ -52,11 +52,11 @@ class DisplaySkill:
         pass
 
     @property
-    def skills_key(self) -> List[List[int]]:
-        return self._skills_key
+    def skills_needed(self) -> List[List[int]]:
+        return self._skills_needed
 
-    @skills_key.setter
-    def skills_key(self, value: List[List[int]]) -> None:
+    @skills_needed.setter
+    def skills_needed(self, value: List[List[int]]) -> None:
         if min(map(min, value)) != 0:
             raise ValueError("skills must be indexed at zero")
 
@@ -65,7 +65,7 @@ class DisplaySkill:
                 "cannot plot more than 2 skills. Construct with `second_skill_color=None`."
             )
 
-        self._skills_key = value
+        self._skills_needed = value
 
     @property
     def extent(self) -> Tuple[int, int, int, int]:
@@ -81,11 +81,11 @@ class DisplaySkill:
 
     @property
     def n_skills(self) -> int:
-        return max(map(max, self.skills_key)) + 1
+        return max(map(max, self.skills_needed)) + 1
 
     @property
     def n_questions(self) -> int:
-        return len(self.skills_key)
+        return len(self.skills_needed)
 
     def _pre_process(self, responses: pd.DataFrame):
         if self.extent is None:
@@ -95,7 +95,7 @@ class DisplaySkill:
 
         for wrong_answer_xy in np.transpose(np.where(answers == 0)):
             person, question = wrong_answer_xy
-            required_skills = self.skills_key[question]
+            required_skills = self.skills_needed[question]
             answers.at[person, question] = self.color_skills[
                 ",".join(map(str, required_skills))
             ]
@@ -106,7 +106,7 @@ class DisplaySkill:
 
             for idx, value in wrong_answers.iteritems():
                 person, question = idx
-                skill = self.skills_key[question]
+                skill = self.skills_needed[question]
                 if len(skill) > 1 and value != 0:
                     c = self.second_skill_color[skill[-1]]
                     r = Rectangle((question, person + 0.5), 1.0, 0.5, fc=c, ec="none")
