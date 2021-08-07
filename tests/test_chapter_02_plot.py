@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import pytest
@@ -6,25 +7,45 @@ from mbml_numpyro import DisplaySkill, chapter_02_data
 
 
 @pytest.mark.parametrize(
-    "expected", [(np.array([[1, 1, 1], [2, 1, 1], [2, 1, 9]], dtype="int32"))]
+    "input,color_skills,skills_key,expected",
+    [
+        (
+            pd.DataFrame(np.array([[1, 1, 1], [0, 1, 1], [0, 1, 0]], dtype="int32")),
+            {"0": 2, "0,6": 9},
+            [[0], [0], [0, 6]],
+            np.array([[1, 1, 1], [2, 1, 1], [2, 1, 9]], dtype="int32"),
+        )
+    ],
 )
-def test_figure_2pt15(expected):
+def test_figure_2pt15___pre_process(input, color_skills, skills_key, expected):
+    # Arrange
+    figure_2pt15 = DisplaySkill(
+        cmap=ListedColormap(
+            [
+                "white",
+            ]
+        ),
+        color_skills=color_skills,
+        skills_key=skills_key,
+    )
+    # Act
+    answers = figure_2pt15._pre_process(input).values
+    # Assert
+    np.testing.assert_equal(expected, answers)
+
+
+@pytest.mark.mpl_image_compare
+def test_plot_figure_2pt15():
     # Arrange
     color_skills = {str(i - 2): i for i in range(2, 8)}
     color_skills["1,6"] = 8
     color_skills["0,6"] = 9
     color_skills["1,4"] = 10
-    color_skills[6] = "magenta"
-    color_skills[4] = "orange"
 
-    temps = (
-        chapter_02_data["raw_data"].loc[1:, "Q1":"Q48"]
-        == chapter_02_data["raw_data"].loc[0, "Q1":"Q48"]
-    ).copy()
-    temps = temps.astype("int32")
+    second_skill = {6: "magenta", 4: "orange"}
 
     figure_2pt15 = DisplaySkill(
-        ListedColormap(
+        cmap=ListedColormap(
             [
                 "white",
                 "red",
@@ -38,12 +59,21 @@ def test_figure_2pt15(expected):
                 "cyan",
             ]
         ),
-        chapter_02_data["skills_needed"],
-        color_skills,
+        color_skills=color_skills,
+        skills_key=chapter_02_data.skills_needed,
+        second_skill_color=second_skill,
+        skill_legend=dict(
+            red="Core",
+            orange="OOP",
+            yellow="Life Cycle",
+            green="Web Apps",
+            cyan="Desktop apps",
+            blue="SQL",
+            magenta="C#",
+        ),
+        return_fig_ax=True,
     )
     # Act
-    answers = figure_2pt15._pre_process(
-        pd.DataFrame(temps.values).iloc[: expected.shape[0], : expected.shape[1]]
-    ).values
+    fig, _ = figure_2pt15.plot(chapter_02_data.responses.T)
     # Assert
-    np.testing.assert_equal(expected, answers)
+    return fig
