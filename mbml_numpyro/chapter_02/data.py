@@ -3,8 +3,20 @@ Data for Chapter 2
 """
 from dataclasses import dataclass, field
 from typing import List
+from collections import defaultdict
 
 import pandas as pd
+
+types = defaultdict(lambda: "pd.DataFrame")
+types["skills_needed"] = "List[List[int]]"
+
+details = {
+    "raw_data": "raw data",
+    "self_assessed": "self assessed skills from each participants",
+    "skills_key": "skills nesscary for each question as bool indicator, columns = n_skills, rows = n_questions",
+    "skills_needed": "sparse version of skills_key",
+    "responses": "Graded responses, columns = n_participants, rows = n_questions",
+}
 
 
 @dataclass(frozen=True, order=True)
@@ -27,7 +39,7 @@ class ChapterData02:
             columns: n_skills
             rows: n_questions
     :params skills_needed List[List[int]]: sparse version of skills_key
-    :params responses pd.DataFrame: Graded responses, where columns are participants and rows are their grades prespones
+    :params responses pd.DataFrame: Graded responses, where columns are participants and rows are their grades responses
         `responses.dtypes`: int32, because of ploting
         `responses.shape`: (48,22)
             columns: n_participants
@@ -39,6 +51,19 @@ class ChapterData02:
     skills_key: pd.DataFrame
     skills_needed: List[List[int]]
     responses: pd.DataFrame
+
+    def __repr__(self):
+        parts = []
+        for attr in self.__annotations__.keys():
+            dim = (
+                getattr(self, attr).shape
+                if isinstance(getattr(self, attr), pd.DataFrame)
+                else len(getattr(self, attr))
+            )
+            parts.append(
+                f"{self.__class__.__name__}.{attr:13} | {types[attr]:15} shape= {str(dim):10} {details[attr]}"
+            )
+        return "\n".join(parts)
 
 
 # data code is form the post from the pyro forum
