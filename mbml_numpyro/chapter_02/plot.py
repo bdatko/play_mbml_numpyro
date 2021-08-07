@@ -83,6 +83,10 @@ class DisplaySkill:
     def n_skills(self) -> int:
         return max(map(max, self.skills_key)) + 1
 
+    @property
+    def n_questions(self) -> int:
+        return len(self.skills_key)
+
     def _pre_process(self, responses: pd.DataFrame):
         if self.extent is None:
             self._extent = (0, responses.shape[1], responses.shape[0], 0)
@@ -116,12 +120,14 @@ class DisplaySkill:
 
         :param responses pd.DataFrame: DataFrame of the array of the correct and incorrect
             responses.
-            Expect `responses.shape` == (n_questions, n_participants)
+            Expect `responses.shape` == (n_participants, n_questions)
             Expect `responses.dtype` == int
             Expect `respones.columns` == range(n_participants)
             Expect `respones.index` == range(n_questions)
         """
 
+        assert responses.shape[1] == self.n_questions
+        assert np.issubdtype(responses.values.dtype, np.integer)
         assert (responses.index == pd.RangeIndex(responses.shape[0])).all()
         assert (responses.columns == pd.RangeIndex(responses.shape[1])).all()
 
