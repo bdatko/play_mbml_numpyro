@@ -17,7 +17,7 @@ from mbml_numpyro import DisplaySkill, chapter_02_data
         )
     ],
 )
-def test_figure_2pt15___pre_process(input, color_skills, skills_key, expected):
+def test_DisplaySkill___pre_process(input, color_skills, skills_key, expected):
     # Arrange
     figure_2pt15 = DisplaySkill(
         cmap=ListedColormap(
@@ -46,7 +46,7 @@ def test_figure_2pt15___pre_process(input, color_skills, skills_key, expected):
         ({"0": 2, "0,6": 9}, [[1], [2]], None, ValueError),
     ],
 )
-def test_DisplaySkill_raise_expectation(
+def test_DisplaySkill__init__raise_expectation(
     color_skills, skills_key, second_skill_color, expected
 ):
     # Arrange
