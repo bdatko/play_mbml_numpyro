@@ -33,9 +33,10 @@ class DisplaySkill:
     """
 
     cmap: ListedColormap
-    skills_key: List[List[int]]
     color_skills: Dict[str, int]
     second_skill_color: Optional[Dict[int, str]] = None
+    skills_key: List[List[int]]
+    _skills_key: List[List[int]] = field(repr=False, init=False)
     skill_legend: Optional[Dict[str, str]] = None
     figsize: Tuple[int, int] = (20, 10)
     copy: bool = True
@@ -49,6 +50,22 @@ class DisplaySkill:
 
     def __post_init__(self):
         pass
+
+    @property
+    def skills_key(self) -> List[List[int]]:
+        return self._skills_key
+
+    @skills_key.setter
+    def skills_key(self, value: List[List[int]]) -> None:
+        if min(map(min, value)) != 0:
+            raise ValueError("skills must be indexed at zero")
+
+        if self.second_skill_color is not None and max(map(len, value)) > 2:
+            raise ValueError(
+                "cannot plot more than 2 skills. Construct with `second_skill_color=None`."
+            )
+
+        self._skills_key = value
 
     @property
     def extent(self) -> Tuple[int, int, int, int]:
@@ -99,10 +116,10 @@ class DisplaySkill:
 
         :param responses pd.DataFrame: DataFrame of the array of the correct and incorrect
             responses.
-            Except `responses.shape` == (n_questions, n_participants)
-            Except `responses.dtype` == int
-            Except `respones.columns` == range(n_participants)
-            Except `respones.index` == range(n_questions)
+            Expect `responses.shape` == (n_questions, n_participants)
+            Expect `responses.dtype` == int
+            Expect `respones.columns` == range(n_participants)
+            Expect `respones.index` == range(n_questions)
         """
 
         assert (responses.index == pd.RangeIndex(responses.shape[0])).all()
