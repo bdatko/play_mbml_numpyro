@@ -34,6 +34,37 @@ def test_figure_2pt15___pre_process(input, color_skills, skills_key, expected):
     np.testing.assert_equal(expected, answers)
 
 
+@pytest.mark.parametrize(
+    "color_skills,skills_key,second_skill_color,expected",
+    [
+        (
+            {"0": 2, "1": 3, "0,1,2": 4},
+            [[0], [0], [0, 1, 2]],
+            {1: "magenta", 2: "orange"},
+            ValueError,
+        ),
+        ({"0": 2, "0,6": 9}, [[1], [2]], None, ValueError),
+    ],
+)
+def test_DisplaySkill_raise_expectation(
+    color_skills, skills_key, second_skill_color, expected
+):
+    # Arrange
+    # Act
+    # Assert
+    with pytest.raises(expected):
+        _ = DisplaySkill(
+            cmap=ListedColormap(
+                [
+                    "white",
+                ]
+            ),
+            color_skills=color_skills,
+            skills_key=skills_key,
+            second_skill_color=second_skill_color,
+        )
+
+
 @pytest.mark.mpl_image_compare
 def test_plot_figure_2pt15():
     # Arrange
