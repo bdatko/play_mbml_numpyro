@@ -39,6 +39,7 @@ poetry2conda = "^0.3.0"
 black = "^21.6b0"
 mypy = "^0.910"
 pylint = "^2.9.3"
+pytest-mpl = "^0.13"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
