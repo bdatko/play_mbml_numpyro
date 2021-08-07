@@ -137,7 +137,22 @@ def test_plot_raise_expectation(
 
 
 @pytest.mark.mpl_image_compare
-def test_plot_figure_2pt15():
+@pytest.mark.parametrize(
+    "skill_legend",
+    [
+        dict(
+            red="Core",
+            orange="OOP",
+            yellow="Life Cycle",
+            green="Web Apps",
+            cyan="Desktop apps",
+            blue="SQL",
+            magenta="C#",
+        ),
+        None,
+    ],
+)
+def test_plot_figure_2pt15(skill_legend):
     # Arrange
     color_skills = {str(i - 2): i for i in range(2, 8)}
     color_skills["1,6"] = 8
@@ -164,15 +179,7 @@ def test_plot_figure_2pt15():
         color_skills=color_skills,
         skills_needed=chapter_02_data.skills_needed,
         second_skill_color=second_skill,
-        skill_legend=dict(
-            red="Core",
-            orange="OOP",
-            yellow="Life Cycle",
-            green="Web Apps",
-            cyan="Desktop apps",
-            blue="SQL",
-            magenta="C#",
-        ),
+        skill_legend=skill_legend,
         return_fig_ax=True,
     )
     # Act
