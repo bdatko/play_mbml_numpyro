@@ -65,6 +65,77 @@ def test_DisplaySkill__init__raise_expectation(
         )
 
 
+@pytest.mark.parametrize(
+    "responses,color_skills,skills_key,second_skill_color,expected",
+    [
+        (
+            pd.DataFrame(
+                np.array(
+                    [[1, 1, 1, 1, 1], [0, 1, 1, 0, 1], [0, 1, 0, 0, 0]], dtype="int32"
+                )
+            ),
+            {"0": 2, "2": 3, "0,1": 4, "1,2": 5},
+            [[0], [0], [0, 1], [2]],
+            {1: "magenta", 2: "orange"},
+            AssertionError,
+        ),
+        (
+            pd.DataFrame(
+                np.array(
+                    [[1, 1, 1, 1, 1], [0, 1, 1, 0, 1], [0, 1, 0, 0, 0]], dtype="bool"
+                )
+            ),
+            {"0": 2, "2": 3, "0,1": 4, "1,2": 5},
+            [[0], [0], [0, 1], [2], [1, 2]],
+            {1: "magenta", 2: "orange"},
+            AssertionError,
+        ),
+        (
+            pd.DataFrame(
+                np.array(
+                    [[1, 1, 1, 1, 1], [0, 1, 1, 0, 1], [0, 1, 0, 0, 0]], dtype="int32"
+                ),
+                columns=["Q{}".format(i) for i in range(5)],
+            ),
+            {"0": 2, "2": 3, "0,1": 4, "1,2": 5},
+            [[0], [0], [0, 1], [2], [1, 2]],
+            {1: "magenta", 2: "orange"},
+            AssertionError,
+        ),
+        (
+            pd.DataFrame(
+                np.array(
+                    [[1, 1, 1, 1, 1], [0, 1, 1, 0, 1], [0, 1, 0, 0, 0]], dtype="int32"
+                ),
+                index=range(1, 4),
+            ),
+            {"0": 2, "2": 3, "0,1": 4, "1,2": 5},
+            [[0], [0], [0, 1], [2], [1, 2]],
+            {1: "magenta", 2: "orange"},
+            AssertionError,
+        ),
+    ],
+)
+def test_plot_raise_expectation(
+    responses, color_skills, skills_key, second_skill_color, expected
+):
+    # Arrange
+    figure_2pt15 = DisplaySkill(
+        cmap=ListedColormap(
+            [
+                "white",
+            ]
+        ),
+        color_skills=color_skills,
+        skills_key=skills_key,
+        second_skill_color=second_skill_color,
+    )
+    # Act
+    # Assert
+    with pytest.raises(expected):
+        figure_2pt15.plot(responses)
+
+
 @pytest.mark.mpl_image_compare
 def test_plot_figure_2pt15():
     # Arrange
