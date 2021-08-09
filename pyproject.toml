@@ -31,6 +31,7 @@ ipython = "^7.25.0"
 jupytext = "^1.11.3"
 funsor = "^0.4.1"
 daft = "^0.1.2"
+numpyro = "^0.7.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
