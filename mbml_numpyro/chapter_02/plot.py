@@ -176,7 +176,12 @@ class DisplaySkill:
 
 
 def plot_inferred_true_skills(
-    inferred: np.array, true: np.array, figsize=(5, 5), return_fig=False
+    inferred: np.array,
+    true: np.array,
+    figsize=(5, 5),
+    return_fig=False,
+    titles=(None, None),
+    fontdict=None,
 ):
     assert inferred.shape == true.shape
     fig, ax = plt.subplots(1, 2, figsize=figsize)
@@ -186,11 +191,13 @@ def plot_inferred_true_skills(
     ax[0].set_xlabel("Skills")
     ax[0].set(yticklabels=[])
     ax[0].set(xticklabels=[])
+    ax[0].set_title(label=titles[0], fontdict=fontdict)
     ax[1].imshow(true, cmap="Greys_r")
     ax[1].set_aspect("equal")
     ax[1].set_xlabel("Skills")
     ax[1].set(yticklabels=[])
     ax[1].set(xticklabels=[])
+    ax[1].set_title(label=titles[1], fontdict=fontdict)
 
     if return_fig:
         return fig, ax
