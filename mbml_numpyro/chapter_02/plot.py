@@ -1,14 +1,14 @@
 """
 Module for plotting
 """
-from typing import Dict, List, Tuple, Optional
+from dataclasses import dataclass, field
+from typing import Dict, List, Optional, Tuple, Union
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from matplotlib.colors import ListedColormap
 from matplotlib.patches import Rectangle
-from dataclasses import dataclass, field
 
 
 @dataclass
@@ -114,9 +114,17 @@ class DisplaySkill:
 
         return answers
 
-    def plot(self, responses: pd.DataFrame):
+    def plot(
+        self,
+        responses: pd.DataFrame,
+        ax=None,
+        plot_legend=True,
+        bbox_to_anchor: Union[
+            Tuple[float, float], Tuple[float, float, float, float]
+        ] = (0.5, -0.08),
+    ):
         """
-        Plot the Figure 2.15 from `responses`.
+        Plot Figure 2.15 from `responses`.
 
         :param responses pd.DataFrame: DataFrame of the array of the correct and incorrect
             responses.
@@ -124,6 +132,10 @@ class DisplaySkill:
             Expect `responses.dtype` == int
             Expect `respones.columns` == range(n_participants)
             Expect `respones.index` == range(n_questions)
+        :param ax: matplotlib axes
+        :param plot_legend bool: bool to plot legend, will only plot legend only if skill_legend is not None
+        :param bbox_to_anchor Union[Tuple[float, float], Tuple[float, float, float, float]:
+            see `bbox_to_anchor` https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.legend.html
         """
 
         assert responses.shape[1] == self.n_questions
@@ -136,7 +148,11 @@ class DisplaySkill:
 
         responses = self._pre_process(responses)
 
-        fig, ax = plt.subplots(figsize=self.figsize)
+        if ax is None:
+            fig, ax = plt.subplots(figsize=self.figsize)
+        else:
+            fig = None
+
         ax.imshow(responses.values, cmap=self.cmap, extent=self.extent)
         ax.set_xticks(np.arange(0, responses.shape[-1], 1))
         ax.set_yticks(np.arange(0, responses.shape[0], 1))
@@ -149,7 +165,7 @@ class DisplaySkill:
         ax.set(yticklabels=[])
         ax.set(xticklabels=[])
 
-        if self.skill_legend is not None:
+        if plot_legend and self.skill_legend is not None:
 
             # https://stackoverflow.com/a/46267860/3587374
             legend_handles = [
@@ -167,7 +183,7 @@ class DisplaySkill:
             ax.legend(
                 handles=legend_handles,
                 loc="upper center",
-                bbox_to_anchor=(0.5, -0.08),
+                bbox_to_anchor=bbox_to_anchor,
                 ncol=self.n_skills if self.n_skills <= 7 else 7,
             )
 
