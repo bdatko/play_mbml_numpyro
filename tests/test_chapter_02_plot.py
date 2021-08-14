@@ -180,9 +180,8 @@ def test_plot_figure_2pt15(skill_legend):
         skills_needed=chapter_02_data.skills_needed,
         second_skill_color=second_skill,
         skill_legend=skill_legend,
-        return_fig_ax=True,
     )
     # Act
-    fig, _ = figure_2pt15.plot(chapter_02_data.responses.T)
+    fig, _ = figure_2pt15.plot(chapter_02_data.responses.T, return_fig_ax=True)
     # Assert
     return fig
