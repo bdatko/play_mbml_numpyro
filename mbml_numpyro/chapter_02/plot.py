@@ -29,7 +29,6 @@ class DisplaySkill:
         keys are color name, and the values are the labels for the skills
     :param figsize Tuple[int, int]: size of the figure, passed to `matplotlib.pyplot.subplots`
     :param copy Bool: Either modify the `response` array inplace when plotting or not
-    :param return_fig_ax Bool: Either return the `fig` and `ax` or not
     """
 
     cmap: ListedColormap
@@ -40,7 +39,6 @@ class DisplaySkill:
     skill_legend: Optional[Dict[str, str]] = None
     figsize: Tuple[int, int] = (20, 10)
     copy: bool = True
-    return_fig_ax: bool = False
     _extent: Optional[Tuple[int, int, int, int]] = field(
         default=None, repr=False, init=False
     )
@@ -122,6 +120,7 @@ class DisplaySkill:
         bbox_to_anchor: Union[
             Tuple[float, float], Tuple[float, float, float, float]
         ] = (0.5, -0.08),
+        return_fig_ax: bool = False,
     ):
         """
         Plot Figure 2.15 from `responses`.
@@ -136,6 +135,7 @@ class DisplaySkill:
         :param plot_legend bool: bool to plot legend, will only plot legend only if skill_legend is not None
         :param bbox_to_anchor Union[Tuple[float, float], Tuple[float, float, float, float]:
             see `bbox_to_anchor` https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.legend.html
+        :param return_fig_ax Bool: Either return the `fig` and `ax` or not
         """
 
         assert responses.shape[1] == self.n_questions
@@ -187,7 +187,7 @@ class DisplaySkill:
                 ncol=self.n_skills if self.n_skills <= 7 else 7,
             )
 
-        if self.return_fig_ax:
+        if return_fig_ax:
             return fig, ax
 
 
